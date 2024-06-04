@@ -1,0 +1,9 @@
+.env
+
+# Ignore Python bytecode
+*.pyc
+__pycache__/
+
+src/crewai_basic_example.code-workspace
+
+.vscode/
