@@ -4,6 +4,6 @@
 *.pyc
 __pycache__/
 
-src/crewai_basic_example.code-workspace
+crewai_basic_example.code-workspace
 
 .vscode/

@@ -39,6 +39,11 @@ print(LANGTRACE_API_KEY)
 langtrace.init(api_key=LANGTRACE_API_KEY)
 from crewai import Agent, Crew, Process, Task
 from tools import ExaSearchToolset
+from langchain_openai import ChatOpenAI
+
+llm = ChatOpenAI(
+    model=OPENAI_MODEL_NAME, base_url=OPENAI_API_BASE, openai_api_key="OPENAI_API_KEY"
+)
 
 
 # Create a function to log to a file with the date as the filename - this will be used as a callback function for the agent. this could be as complex as you like
@@ -54,11 +59,12 @@ researcher = Agent(
     goal="Research the topic based on latest information",
     backstory="As an expert in the field of {topic}, you will research the topic using the available tools and provide the necessary information",
     max_iter=3,  # This is the maximum number of iterations that the agent will use to generate the output
-    max_rpm=100,  # This is the maximum number of requests per minute that the agent can make to the language model
+    max_rpm=500,  # This is the maximum number of requests per minute that the agent can make to the language model
     verbose=True,  # This is a flag that determines if the agent will print more output to the console
     step_callback=write_result_to_file,  # This is a callback function that will be called after each iteration of the agent
     allow_delegation=False,  # This is a flag that determines if the agent can delegate the task to another agent. As we are only using one agent, we set this to False
     tools=ExaSearchToolset.tools(),
+    llm=llm,
 )
 
 # Create the task
@@ -83,6 +89,6 @@ crew = Crew(
 
 # Starting start the crew
 result = crew.kickoff(
-    inputs={"topic": "The history of the Edmonton Waste Water Treatment plant."}
+    inputs={"topic": "The history of the GoldBond foot powder."}
 )  # Change the topic to whatever you want to research
 print(result)
